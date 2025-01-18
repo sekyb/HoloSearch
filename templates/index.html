@@ -1,16 +1,164 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokémon Regex Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFFFFF; /* White background */
+            margin: 0;
+            padding: 0;
+            color: #333333; /* Dark text for better readability */
+        }
+        /* Header container with Flexbox */
+.header {
+    display: flex;
+    align-items: center; /* Vertically align the image and text */
+    justify-content: center; /* Horizontally center the content */
+    background-color: #1E3A8A; /* Deep modern blue header */
+    color: #FFFFFF;
+    padding: 30px 0;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+}
+
+/* Logo styling */
+.logo {
+    margin-right: 20px; /* Space between the image and the text */
+}
+
+.logo img {
+    max-width: 200px; /* Set the max width for the image */
+    height: auto;
+}
+
+/* Text styling */
+.logo-text {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #FFFFFF; /* White color for text */
+}
+
+/* Header title styling with gradient effect */
+header h1 {
+    margin: 0;
+    font-size: 2.5em;
+    font-weight: bold;
+    background: linear-gradient(90deg, #1E3A8A, #3B82F6); /* Modern blue gradient */
+    -webkit-background-clip: text;
+    color: transparent; /* Transparent text to show the gradient */
+}
+
+        .search-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .search-bar {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            border: 2px solid #3B82F6; /* Modern blue border */
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        .search-bar:focus {
+            outline: none;
+            border-color: #1D4ED8; /* Darker blue border on focus */
+            background-color: #E0F2FE; /* Light blue background on focus */
+        }
+        .search-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #3B82F6; /* Modern blue button */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .search-btn:hover {
+            background-color: #2563EB; /* Darker blue on hover */
+        }
+        .results-container {
+            margin-top: 40px;
+        }
+        .result-item {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            border: 2px solid #3B82F6; /* Blue border for result items */
+        }
+        .result-item img {
+            width: 80px;
+            height: 80px;
+            margin-right: 20px;
+        }
+        .result-item .pokemon-info {
+            flex: 1;
+        }
+        .result-item h3 {
+            margin: 0;
+            font-size: 1.5em;
+            background: linear-gradient(90deg, #1E3A8A, #3B82F6); /* Gradient effect for result titles */
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .result-item p {
+            margin: 5px 0;
+            font-size: 1.1em;
+        }
+        .stats ul {
+            padding-left: 20px;
+        }
+        footer {
+            background-color: #1E3A8A; /* Deep blue footer */
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-    <h1>Pokémon Regex Search</h1>
-    <form action="/search" method="post" id="searchForm">
-        <label for="regex">Enter Regex:</label>
-        <input type="text" id="regex" name="regex" required>
-        <button type="submit">Search</button>
-    </form>
-    <div id="results"></div>
+    <header>
+<!--        <div class="logo">
+            <img src="/static/images/HS_RBC.png" alt="Logo"><h1>HOLOSEARCH</h1></div> -->
+            <div class="header">
+                <img src="/static/images/HS_RBC2.png" alt="Logo" class="logo">
+                <span class="logo-text">HOLOSEARCH</span>
+            </div>
+            
+        
+    </header>
+
+    <div class="search-container">
+        <form action="/search" method="post" id="searchForm">
+            <div class="magnifying-glass"></div>
+            <input type="text" id="regex" name="regex" class="search-bar" placeholder="Enter Pokémon search query (Regex)" required>
+            <button type="submit" class="search-btn">Search</button>
+        </form>
+    </div>
+
+    <div class="results-container" id="results"></div>
+
+    <footer>
+        <p>Pokémon Regex Search - 2025</p>
+    </footer>
+
     <script>
         const form = document.getElementById('searchForm');
         form.addEventListener('submit', async (e) => {
@@ -28,26 +176,27 @@
                 resultsDiv.innerHTML = `<p style="color:red;">Error: ${data.error}</p>`;
             } else {
                 resultsDiv.innerHTML = `
-                    <h2>Matches:</h2>
-                    <ul>
-                        ${data.matches.map(pokemon => `
-                            <li>
-                                <img src="${pokemon.image}" alt="${pokemon.name}" style="width:50px;height:50px;">
-                                <strong>Name:</strong> ${pokemon.name} <br>
-                                <strong>ID:</strong> ${pokemon.id} <br>
-                                <strong>Height:</strong> ${pokemon.height} <br>
-                                <strong>Weight:</strong> ${pokemon.weight} <br>
-                                <strong>Types:</strong> ${pokemon.types.join(', ')} <br>
-                                <strong>Abilities:</strong> ${pokemon.abilities.join(', ')} <br>
-                                <strong>Stats:</strong> 
-                                <ul>
-                                    ${Object.entries(pokemon.stats).map(([key, value]) => `
-                                        <li>${key}: ${value}</li>
-                                    `).join('')}
-                                </ul>
-                            </li>
-                        `).join('')}
-                    </ul>
+                    <h2>Search Results:</h2>
+                    ${data.matches.map(pokemon => `
+                        <div class="result-item">
+                            <img src="${pokemon.image}" alt="${pokemon.name}">
+                            <div class="pokemon-info">
+                                <h3>${pokemon.name} (ID: ${pokemon.id})</h3>
+                                <p><strong>Height:</strong> ${pokemon.height}</p>
+                                <p><strong>Weight:</strong> ${pokemon.weight}</p>
+                                <p><strong>Types:</strong> ${pokemon.types.join(', ')}</p>
+                                <p><strong>Abilities:</strong> ${pokemon.abilities.join(', ')}</p>
+                                <div class="stats">
+                                    <strong>Stats:</strong>
+                                    <ul>
+                                        ${Object.entries(pokemon.stats).map(([key, value]) => `
+                                            <li>${key}: ${value}</li>
+                                        `).join('')}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
                 `;
             }
         });
