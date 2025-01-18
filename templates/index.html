@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="icon" href="/static/images/HS_RBC2.png" type="image/png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokémon Regex Search</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <title>HoloSearch</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -139,7 +141,7 @@ header h1 {
             <img src="/static/images/HS_RBC.png" alt="Logo"><h1>HOLOSEARCH</h1></div> -->
             <div class="header">
                 <img src="/static/images/HS_RBC2.png" alt="Logo" class="logo">
-                <span class="logo-text">HOLOSEARCH</span>
+                <span class="logo-text">HOLOSEARCH</span>Alpha
             </div>
             
         
@@ -148,15 +150,20 @@ header h1 {
     <div class="search-container">
         <form action="/search" method="post" id="searchForm">
             <div class="magnifying-glass"></div>
-            <input type="text" id="regex" name="regex" class="search-bar" placeholder="Enter Pokémon search query (Regex)" required>
+            <input type="text" id="regex" name="regex" class="search-bar" placeholder="Enter seach for Pokemon.." required>
             <button type="submit" class="search-btn">Search</button>
         </form>
+        <p style="color: #A9A9A9;">&#169; Pokémon and Pokémon-related content are trademarks of The Pokémon Company, Nintendo, and Game Freak. All rights reserved.</p>
+        <p style="color: #A9A9A9;">Pokémon API data is sourced from the <a href="https://pokeapi.co/" target="_blank" style="color: #D3D3D3;">PokéAPI</a>. The API is an unofficial third-party service and is not affiliated with or endorsed by The Pokémon Company, Nintendo, or Game Freak.</p>
+
     </div>
 
     <div class="results-container" id="results"></div>
 
     <footer>
-        <p>Pokémon Regex Search - 2025</p>
+        <p>HoloSearch - SEKYB 2025 - 
+            <a href="https://github.com/sekyb" target="_blank" style="color: white; text-decoration: none;">
+                <i class="fab fa-github" style="font-size: 1.5em; margin-right: 8px;"></i>GitHub</a>
     </footer>
 
     <script>
