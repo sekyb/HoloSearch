@@ -1,5 +1,5 @@
 # HoloSearch
-
+![Example_Screenshot.png]
 **HoloSearch** is a flask application that allows users to search for Pokémon details through a sleek, responsive interface. The app uses data from the unofficial PokéAPI to provide information such as height, weight, types, abilities, and stats for each Pokémon.
 
 ## Features
