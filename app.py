@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify, render_template
 import re
 import requests
+import asyncio
+import aiohttp
 
 app = Flask(__name__)
 
@@ -32,7 +34,7 @@ def search_pokemon():
         matching_pokemon = []
         for pokemon in pokemon_list:
             if re.search(regex_pattern, pokemon['name'], re.IGNORECASE):
-                # Fetch additional details for the Pokémon to get all details
+                # Fetch additional details for the Pokémon
                 details_response = requests.get(pokemon['url'])
                 if details_response.status_code == 200:
                     details = details_response.json()
@@ -50,6 +52,42 @@ def search_pokemon():
         return jsonify({"matches": matching_pokemon})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+async def fetch_pokemon_details(session, url):
+    async with session.get(url) as response:
+        return await response.json()
+
+@app.route('/encyclopedia')
+async def encyclopedia():
+    try:
+        async with aiohttp.ClientSession() as session:
+            response = await session.get(f"{POKE_API_BASE_URL}?limit=1008")
+            if response.status != 200:
+                return f"Failed to load Pokémon data, status code: {response.status}", 500
+
+            pokemon_list = await response.json()
+            pokemon_details = []
+
+            tasks = []
+            for pokemon in pokemon_list['results']:
+                tasks.append(fetch_pokemon_details(session, pokemon['url']))
+
+            details = await asyncio.gather(*tasks)
+
+            for detail in details:
+                pokemon_details.append({
+                    'name': detail['name'],
+                    'id': detail['id'],
+                    'image': detail['sprites']['front_default'],
+                })
+
+            return render_template('encyclopedia.html', pokemon_list=pokemon_details)
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return f"An error occurred: {e}", 500
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

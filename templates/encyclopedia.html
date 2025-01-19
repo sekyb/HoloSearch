@@ -133,24 +133,64 @@ header h1 {
             bottom: 0;
             width: 100%;
         }
+            .pokemon-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 10px;
+                padding: 20px;
+            }
+            .pokemon-card {
+                text-align: center;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                background: #f9f9f9;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+            .pokemon-card img {
+                width: 100px;
+            }
             .encyclopedia-btn {
                 display: inline-block;
                 padding: 10px 20px;
                 margin: 20px 0;
                 font-size: 1.2em;
                 color: #fff;
-                background-color: #1E3A8A; /* Deep modern blue */
+                background-color: #1E3A8A;
                 border: none;
                 border-radius: 5px;
                 text-decoration: none;
                 text-align: center;
-                cursor: pointer;
             }
             .encyclopedia-btn:hover {
-                background-color: #3B82F6; /* Lighter modern blue */
+                background-color: #3B82F6;
             }
-
-    </style>
+            footer {
+                background-color: #1E3A8A;
+                color: white;
+                text-align: center;
+                padding: 10px 0;
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+            }
+                .blue-btn {
+                    display: inline-block;
+                    padding: 10px 20px;
+                    font-size: 1.2em;
+                    color: #fff;
+                    background-color: #1E3A8A; /* Blue color */
+                    border: none;
+                    border-radius: 5px;
+                    text-decoration: none;
+                    text-align: center;
+                    cursor: pointer;
+                }
+            
+                .blue-btn:hover {
+                    background-color: #3B82F6; /* Lighter blue on hover */
+                }
+        </style>
 </head>
 <body>
     <header>
@@ -162,70 +202,26 @@ header h1 {
             </div>
             
         
-    </header>
-
-    <div class="search-container">
-        <form action="/search" method="post" id="searchForm">
-            <div class="magnifying-glass"></div>
-            <input type="text" id="regex" name="regex" class="search-bar" placeholder="Enter seach for Pokemon.." required>
-            <button type="submit" class="search-btn">Search</button>
-        </form>
-        <a href="/encyclopedia" class="encyclopedia-btn">Pokémon Encyclopedia</a>
-        <p style="color: #A9A9A9;"> NOTE: It may take a few seconds for your search to appear.</p>
-        <p style="color: #A9A9A9;">&#169; Pokémon and Pokémon-related content are trademarks of The Pokémon Company, Nintendo, and Game Freak. All rights reserved.</p>
-        <p style="color: #A9A9A9;">Pokémon API data is sourced from the <a href="https://pokeapi.co/" target="_blank" style="color: #D3D3D3;">PokéAPI</a>. The API is an unofficial third-party service and is not affiliated with or endorsed by The Pokémon Company, Nintendo, or Game Freak.</p>
-
+        </header>
+<center>
+    <br /><br />
+        <a href="/" class="blue-btn">Back to Search</a></center>
+    <div class="pokemon-grid">
+        {% for pokemon in pokemon_list %}
+        <div class="pokemon-card">
+            <h3>{{ pokemon['name']|capitalize }} (#{{ pokemon['id'] }})</h3>
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ pokemon['id'] }}.png" alt="{{ pokemon['name'] }}">
+        </div>
+        {% endfor %}
     </div>
 
-    <div class="results-container" id="results"></div>
+    <a href="/" class="encyclopedia-btn">Back to Home</a>
 
     <footer>
-        <p>HoloSearch - SEKYB 2025 - 
+        <p>HoloSearch - SEKYB 2025 -
             <a href="https://github.com/sekyb" target="_blank" style="color: white; text-decoration: none;">
                 <i class="fab fa-github" style="font-size: 1.5em; margin-right: 8px;"></i>GitHub</a>
+        </p>
     </footer>
-
-    <script>
-        const form = document.getElementById('searchForm');
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = new FormData(form);
-            const regex = formData.get('regex');
-            const response = await fetch('/search', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({ regex })
-            });
-            const data = await response.json();
-            const resultsDiv = document.getElementById('results');
-            if (data.error) {
-                resultsDiv.innerHTML = `<p style="color:red;">Error: ${data.error}</p>`;
-            } else {
-                resultsDiv.innerHTML = `
-                    <h2>Search Results:</h2>
-                    ${data.matches.map(pokemon => `
-                        <div class="result-item">
-                            <img src="${pokemon.image}" alt="${pokemon.name}">
-                            <div class="pokemon-info">
-                                <h3>${pokemon.name} (ID: ${pokemon.id})</h3>
-                                <p><strong>Height:</strong> ${pokemon.height}</p>
-                                <p><strong>Weight:</strong> ${pokemon.weight}</p>
-                                <p><strong>Types:</strong> ${pokemon.types.join(', ')}</p>
-                                <p><strong>Abilities:</strong> ${pokemon.abilities.join(', ')}</p>
-                                <div class="stats">
-                                    <strong>Stats:</strong>
-                                    <ul>
-                                        ${Object.entries(pokemon.stats).map(([key, value]) => `
-                                            <li>${key}: ${value}</li>
-                                        `).join('')}
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    `).join('')}
-                `;
-            }
-        });
-    </script>
 </body>
 </html>
