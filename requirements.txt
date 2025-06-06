@@ -1,0 +1,5 @@
+flask[async]
+requests
+aiohttp
+redis
+nest_asyncio

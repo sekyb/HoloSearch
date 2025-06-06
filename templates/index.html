@@ -205,23 +205,25 @@ header h1 {
                     <h2>Search Results:</h2>
                     ${data.matches.map(pokemon => `
                         <div class="result-item">
-                            <img src="${pokemon.image}" alt="${pokemon.name}">
-                            <div class="pokemon-info">
-                                <h3>${pokemon.name} (ID: ${pokemon.id})</h3>
-                                <p><strong>Height:</strong> ${pokemon.height}</p>
-                                <p><strong>Weight:</strong> ${pokemon.weight}</p>
-                                <p><strong>Types:</strong> ${pokemon.types.join(', ')}</p>
-                                <p><strong>Abilities:</strong> ${pokemon.abilities.join(', ')}</p>
-                                <div class="stats">
-                                    <strong>Stats:</strong>
-                                    <ul>
-                                        ${Object.entries(pokemon.stats).map(([key, value]) => `
-                                            <li>${key}: ${value}</li>
-                                        `).join('')}
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                         <img src="${pokemon.image}" alt="${pokemon.name}">
+                         <div class="pokemon-info">
+                            <h3>${pokemon.name} (ID: ${pokemon.id})</h3>
+                            <p><strong>Height:</strong> ${pokemon.height}</p>
+                            <p><strong>Weight:</strong> ${pokemon.weight}</p>
+                            <p><strong>Types:</strong> ${pokemon.types.join(', ')}</p>
+                            <p><strong>Abilities:</strong> ${pokemon.abilities.join(', ')}</p>
+                            <p><strong>Base Experience:</strong> ${pokemon.base_experience || 'Unknown'}</p>
+                            <p><strong>Game Locations:</strong> ${pokemon.locations.length ? pokemon.locations.join(', ') : 'Unknown'}</p>
+                            <div class="stats">
+                            <strong>Stats:</strong>
+                            <ul>
+                                ${Object.entries(pokemon.stats).map(([key, value]) => `
+                                    <li>${key}: ${value}</li>
+                            `).join('')}
+                        </ul>
+                 </div>
+             </div>
+        </div>
                     `).join('')}
                 `;
             }
